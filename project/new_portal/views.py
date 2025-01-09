@@ -7,6 +7,7 @@ class NewsList(ListView):
     ordering = '-time_in'  # сортировка по времени создания (от более свежей публикации)
     template_name = 'news.html'  # шаблон с инструкциями об отражении страницы
     context_object_name = 'news'  # имя списка содержащего все объекты
+    paginate_by = 10  # указываем количество записей на странице
 
 
 class NewsDetail(DetailView):
