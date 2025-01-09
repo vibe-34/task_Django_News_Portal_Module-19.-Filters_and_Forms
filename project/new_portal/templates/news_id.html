@@ -1,0 +1,30 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+
+<!--  Подключаем собственный фильтр из new_portal/templatetags/censor_filters -->
+{% load censor_filters %}
+
+<!-- Название у нас будет New_id -->
+{% block title %}
+    {{ news_id.title }}
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим сам товар, идентификатор которого был передан в url -->
+{% block content %}
+<h1>{{ news_id.title }}</h1>
+
+{% if news_id %}
+        <table>
+            <tr>
+                <td>Заголовок</td>
+                <td>Дата публикации</td>
+                <td>Содержание</td>
+            </tr>
+            <tr>
+                <td>{{ news_id.title|censor }}</td>
+                <td>{{ news_id.time_in|date:'d m Y' }}</td>
+                <td>{{ news_id.content|censor}}</td>
+            </tr>
+        </table>
+    {% endif %}
+{% endblock content %}
