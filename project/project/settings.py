@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',  # добавляем для работы с плоскими страницами
 
     'new_portal',  # созданное приложение
+    'django_filters',  # сторонний пакет для фильтраций
 ]
 
 SITE_ID = 1

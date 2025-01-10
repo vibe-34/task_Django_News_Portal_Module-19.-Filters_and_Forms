@@ -25,3 +25,11 @@ def censor(text):
         censored_word = el[0] + '*' * (len(el) - 1)
         text = re.sub(pattern, censored_word, text)
     return text
+
+
+@register.simple_tag(takes_context=True)  # сообщает Django, что для работы тега требуется передать контекст
+def url_replace(context, **kwargs):
+    d = context['request'].GET.copy()  # позволяет скопировать все параметры текущего запроса.
+    for k, v in kwargs.items():  # по указанным полям устанавливаем новые значения, переданные при использовании тега
+        d[k] = v
+    return d.urlencode()  # кодируем параметры в формат, который может быть указан в строке браузера
