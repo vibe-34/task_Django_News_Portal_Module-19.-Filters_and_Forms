@@ -1,6 +1,10 @@
-from django.views.generic import ListView, DetailView
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView
 
-from .models import Post
+from .forms import PostForm
+from .models import Post, Author
 from .filters import PostFilter
 
 
@@ -31,3 +35,15 @@ class NewsDetail(DetailView):
     model = Post
     template_name = 'news_id.html'
     context_object_name = 'news_id'
+
+
+class PostCreate(CreateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'create_post.html'
+    success_url = reverse_lazy('news')  # URL для перенаправления после успешного создания поста
+
+    def form_valid(self, form):
+        author = Author.objects.get(user=self.request.user)
+        form.instance.author = author  # Устанавливаем автора
+        return super().form_valid(form)
