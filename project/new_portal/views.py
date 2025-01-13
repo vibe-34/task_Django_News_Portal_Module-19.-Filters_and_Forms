@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from .forms import PostForm
 from .models import Post, Author
@@ -17,8 +17,7 @@ class NewsList(ListView):
 
     # Переопределяем функцию получения списка товаров
     def get_queryset(self):
-        # Получаем обычный запрос
-        queryset = super().get_queryset()
+        queryset = super().get_queryset()  # Получаем обычный запрос
         # Используем наш класс фильтрации. self.request.GET содержит объект QueryDict
         # сохраняем нашу фильтрацию в объекте класса, чтобы потом добавить в контекст и использовать в шаблоне.
         self.filterset = PostFilter(self.request.GET, queryset)
@@ -26,8 +25,7 @@ class NewsList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Добавляем в контекст объект фильтрации.
-        context['filterset'] = self.filterset
+        context['filterset'] = self.filterset  # Добавляем в контекст объект фильтрации.
         return context
 
 
@@ -39,11 +37,18 @@ class NewsDetail(DetailView):
 
 class PostCreate(CreateView):
     model = Post
-    form_class = PostForm
-    template_name = 'create_post.html'
+    form_class = PostForm               # Указываем разработанную форму
+    template_name = 'create_post.html'  # Шаблон, в котором будет использоваться форма
     success_url = reverse_lazy('news')  # URL для перенаправления после успешного создания поста
 
     def form_valid(self, form):
-        author = Author.objects.get(user=self.request.user)
-        form.instance.author = author  # Устанавливаем автора
+        author = Author.objects.get(user=self.request.user)  # Получаем текущего автора
+        form.instance.author = author                        # Устанавливаем автора
         return super().form_valid(form)
+
+
+class PostUpdate(UpdateView):
+    model = Post
+    form_class = PostForm               # Указываем разработанную форму (ту же самую, что и при создании поста)
+    template_name = 'create_post.html'  # Шаблон, в котором будет использоваться форма
+    success_url = reverse_lazy('news')  # URL для перенаправления после успешного создания поста
