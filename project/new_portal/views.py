@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .forms import PostForm
 from .models import Post, Author
@@ -52,3 +52,9 @@ class PostUpdate(UpdateView):
     form_class = PostForm               # Указываем разработанную форму (ту же самую, что и при создании поста)
     template_name = 'create_post.html'  # Шаблон, в котором будет использоваться форма
     success_url = reverse_lazy('news')  # URL для перенаправления после успешного создания поста
+
+
+class PostDelete(DeleteView):
+    model = Post
+    template_name = 'post_delete.html'
+    success_url = reverse_lazy('news')
