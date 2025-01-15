@@ -6,14 +6,14 @@
 
 <!-- Название у нас будет New_id -->
 {% block title %}
-    {{ news_id.title }}
+    {{ post_id.title }}
 {% endblock title %}
 
 <!-- В контенте на странице мы выводим сам товар, идентификатор которого был передан в url -->
 {% block content %}
-<h1>{{ news_id.title }}</h1>
+<h1>{{ post_id.title }}</h1>
 
-{% if news_id %}
+{% if post_id %}
         <table>
             <tr>
                 <td>Заголовок</td>
@@ -21,9 +21,9 @@
                 <td>Содержание</td>
             </tr>
             <tr>
-                <td>{{ news_id.title|censor }}</td>
-                <td>{{ news_id.time_in|date:'d m Y' }}</td>
-                <td>{{ news_id.content|censor}}</td>
+                <td>{{ post_id.title|censor }}</td>
+                <td>{{ post_id.time_in|date:'d m Y' }}</td>
+                <td>{{ post_id.content|censor}}</td>
             </tr>
         </table>
     {% endif %}

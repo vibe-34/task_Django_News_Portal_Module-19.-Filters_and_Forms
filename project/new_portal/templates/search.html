@@ -6,14 +6,14 @@
 
 <!-- Название у нас будет News -->
 {% block title %}
-News
+Posts
 {% endblock title %}
 
 <!-- В контенте на странице мы выводим сам товар, идентификатор которого был передан в url -->
 {% block content %}
 
 <!--Применяем фильтр length к уже ранее сформированному списку новостей, который мы передаем из views-->
-<h1>Всего публикаций: {{ news|length }}</h1>
+<h1>Всего публикаций: {{ post|length }}</h1>
 
 <!-- Добавляем форму, которая объединяет набор полей, они будут отправляться в запросе -->
     <form action="" method="get">
@@ -22,7 +22,7 @@ News
     </form>
 
 
-    {% if news %}
+    {% if post %}
         <table>
             <tr>
                 <td>Заголовок</td>
@@ -30,11 +30,11 @@ News
                 <td>Содержание</td>
             </tr>
 
-            {% for new in news %}
+            {% for post_ in post %}
             <tr>
-                <td>{{ new.title|censor }}</td>
-                <td>{{ new.time_in|date:'d m Y' }}</td>
-                <td>{{ new.content|truncatechars:20|censor }}</td>
+                <td>{{ post_.title|censor }}</td>
+                <td>{{ post_.time_in|date:'d m Y' }}</td>
+                <td>{{ post_.content|truncatechars:20|censor }}</td>
             </tr>
             {% endfor %}
         </table>

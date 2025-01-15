@@ -8,11 +8,10 @@ from .models import Post, Author
 from .filters import PostFilter
 
 
-class NewsList(ListView):
+class PostList(ListView):
     model = Post
     ordering = '-time_in'  # сортировка по времени создания (от более свежей публикации)
-    template_name = 'news.html'  # шаблон с инструкциями об отражении страницы
-    context_object_name = 'news'  # имя списка содержащего все объекты
+    context_object_name = 'post'  # имя списка содержащего все объекты
     paginate_by = 10  # указываем количество записей на странице
 
     # Переопределяем функцию получения списка товаров
@@ -28,22 +27,31 @@ class NewsList(ListView):
         context['filterset'] = self.filterset  # Добавляем в контекст объект фильтрации.
         return context
 
+    def get_template_names(self):
+        if self.request.path == '/post/search/':
+            return 'search.html'
+        return 'post.html'
 
-class NewsDetail(DetailView):
+
+class PostDetail(DetailView):
     model = Post
-    template_name = 'news_id.html'
-    context_object_name = 'news_id'
+    template_name = 'post_id.html'
+    context_object_name = 'post_id'
 
 
 class PostCreate(CreateView):
     model = Post
     form_class = PostForm               # Указываем разработанную форму
     template_name = 'create_post.html'  # Шаблон, в котором будет использоваться форма
-    success_url = reverse_lazy('news')  # URL для перенаправления после успешного создания поста
+    success_url = reverse_lazy('post')  # URL для перенаправления после успешного создания поста
 
     def form_valid(self, form):
         author = Author.objects.get(user=self.request.user)  # Получаем текущего автора
         form.instance.author = author                        # Устанавливаем автора
+        post = form.save(commit=False)
+        if self.request.path == '/post/news/create/':
+            post.choice_type = 'NW'
+        post.save()
         return super().form_valid(form)
 
 
@@ -51,10 +59,10 @@ class PostUpdate(UpdateView):
     model = Post
     form_class = PostForm               # Указываем разработанную форму (ту же самую, что и при создании поста)
     template_name = 'create_post.html'  # Шаблон, в котором будет использоваться форма
-    success_url = reverse_lazy('news')  # URL для перенаправления после успешного создания поста
+    success_url = reverse_lazy('post')  # URL для перенаправления после успешного создания поста
 
 
 class PostDelete(DeleteView):
     model = Post
     template_name = 'post_delete.html'
-    success_url = reverse_lazy('news')
+    success_url = reverse_lazy('post')
