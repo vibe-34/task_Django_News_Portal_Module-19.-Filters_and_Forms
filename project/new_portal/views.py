@@ -36,7 +36,7 @@ class PostList(ListView):
 class PostDetail(DetailView):
     model = Post
     template_name = 'post_id.html'
-    context_object_name = 'post_id'
+    context_object_name = 'post_id'  # имя для обращения в шаблоне
 
 
 class PostCreate(CreateView):
